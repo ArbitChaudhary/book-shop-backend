@@ -9,12 +9,12 @@ load_dotenv()
 
 
 def _build_db_url() -> str:
-    explicit = os.getenv("SUPABASE_DB_URL")
+    explicit = os.getenv("SUPABASE_URL")
     if explicit:
         return explicit
 
     password = os.getenv("SUPA_PASSWORD")
-    supabase_url = os.getenv("SUPABASE_DB_URL")
+    supabase_url = os.getenv("SUPABASE_URL")
     if password and supabase_url:
         # project ref is the first label of the Supabase URL host
         project_ref = urlparse(supabase_url).hostname.split(".")[0]
@@ -24,14 +24,14 @@ def _build_db_url() -> str:
         )
 
     raise RuntimeError(
-        "Set SUPABASE_DB_URL, or SUPABASE_URL and SUPA_PASSWORD, in the environment"
+        "Set SUPABASE_URL, or SUPABASE_URL and SUPA_PASSWORD, in the environment"
     )
 
 
-SUPABASE_DB_URL = _build_db_url()
+SUPABASE_URL = _build_db_url()
 
 # pool_pre_ping avoids stale connections dropped by Supabase's pooler
-engine = create_engine(SUPABASE_DB_URL, pool_pre_ping=True)
+engine = create_engine(SUPABASE_URL, pool_pre_ping=True)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 

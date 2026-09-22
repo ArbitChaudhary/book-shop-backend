@@ -9,9 +9,7 @@ from src.core.user_roles.router import router as user_router
 load_dotenv()
 app = FastAPI()
 
-supabase: Client = create_client(
-    os.getenv("SUPABASE_DB_URL"), os.getenv("SUPABASE_KEY")
-)
+supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
 
 app.include_router(books_router)
 app.include_router(user_router)

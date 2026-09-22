@@ -2,7 +2,7 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from src.config.database import Base, SUPABASE_DB_URL, engine
+from src.config.database import Base, SUPABASE_URL, engine
 from src.core.books import model  # noqa: F401  ensures models register on Base.metadata
 
 # this is the Alembic Config object, which provides
@@ -39,7 +39,7 @@ def run_migrations_offline() -> None:
 
     """
     context.configure(
-        url=SUPABASE_DB_URL,
+        url=SUPABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
