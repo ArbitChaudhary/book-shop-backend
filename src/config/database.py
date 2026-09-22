@@ -14,7 +14,7 @@ def _build_db_url() -> str:
         return explicit
 
     password = os.getenv("SUPA_PASSWORD")
-    supabase_url = os.getenv("SUPABASE_URL")
+    supabase_url = os.getenv("SUPABASE_DB_URL")
     if password and supabase_url:
         # project ref is the first label of the Supabase URL host
         project_ref = urlparse(supabase_url).hostname.split(".")[0]
