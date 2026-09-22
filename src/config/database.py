@@ -1,5 +1,5 @@
 import os
-from urllib.parse import quote_plus, urlparse
+from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
@@ -9,29 +9,29 @@ load_dotenv()
 
 
 def _build_db_url() -> str:
-    explicit = os.getenv("SUPABASE_URL")
-    if explicit:
-        return explicit
+    database_url = os.getenv("SUPABASE_DB_URL")
+    if database_url:
+        return database_url
 
     password = os.getenv("SUPA_PASSWORD")
-    supabase_url = os.getenv("SUPABASE_URL")
-    if password and supabase_url:
+    project_ref = os.getenv("SUPABASE_PROJECT_REF")
+    if password and project_ref:
         # project ref is the first label of the Supabase URL host
-        project_ref = urlparse(supabase_url).hostname.split(".")[0]
+        # project_ref = urlparse(supabase_url).hostname.split(".")[0]
         return (
             f"postgresql+psycopg2://postgres:{quote_plus(password)}"
             f"@db.{project_ref}.supabase.co:5432/postgres"
         )
 
     raise RuntimeError(
-        "Set SUPABASE_URL, or SUPABASE_URL and SUPA_PASSWORD, in the environment"
+        "Set SUPABASE_URL, or SUPABASE_DB_URL and SUPA_PASSWORD, in the environment"
     )
 
 
-SUPABASE_URL = _build_db_url()
+DATABASE_URL = _build_db_url()
 
 # pool_pre_ping avoids stale connections dropped by Supabase's pooler
-engine = create_engine(SUPABASE_URL, pool_pre_ping=True)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
